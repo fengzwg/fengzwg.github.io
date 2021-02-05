@@ -185,7 +185,10 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir /etc/vsftpd</span><br><span class="line">$ vim /etc/vsftpd/login.txt</span><br></pre></td></tr></table></figure>
 <p>&#8194;然后生成ftp数据库，并赋予600权限。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ db4.7_load -T -t <span class="built_in">hash</span> -f /etc/vsftpd/login.txt /etc/vsftpd/vsftpd_login.db</span><br><span class="line">$ chmod 600 /etc/vsftpd/vsftpd_login.db</span><br></pre></td></tr></table></figure>
-<h3 id="5-建立基于vsftpd-login的PAM授权文件"><a href="#5-建立基于vsftpd-login的PAM授权文件" class="headerlink" title="5. 建立基于vsftpd_login的PAM授权文件"></a>5. 建立基于vsftpd_login的PAM授权文件</h3><p>&#8194;创建vsftpd.vu文件，并按照如下内容写入文件，此授权文件名称和vsftpd.conf文件中的pam_service_name名称保持一致。 vsftpd.vu的内容为： </p>
+<h3 id="5-建立基于vsftpd-login的PAM授权文件"><a href="#5-建立基于vsftpd-login的PAM授权文件" class="headerlink" title="5. 建立基于vsftpd_login的PAM授权文件"></a>5. 建立基于vsftpd_login的PAM授权文件</h3><p>&#8194;创建vsftpd.vu文件，并按照如下内容写入文件，此授权文件名称和vsftpd.conf文件中的pam_service_name名称保持一致。  </p>
+<p>&#8194;创建vsftpd.vu文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vim /etc/pam.d/vsftpd.vu</span><br></pre></td></tr></table></figure>
+<p> 写入以下内容：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">auth required pam_userdb.so db=/etc/vsftpd/vsftpd_login</span><br><span class="line">account required pam_userdb.so db=/etc/vsftpd/vsftpd_login</span><br></pre></td></tr></table></figure>
 <h3 id="6-设置用户权限等问题"><a href="#6-设置用户权限等问题" class="headerlink" title="6. 设置用户权限等问题"></a>6. 设置用户权限等问题</h3><p>&#8194;创建virtual目录  </p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir /etc/vfstpd/virtual</span><br></pre></td></tr></table></figure>
