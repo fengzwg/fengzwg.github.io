@@ -154,6 +154,98 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Ubuntu20-04-安装配置vsftpd" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/02/05/Ubuntu20-04-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEvsftpd/">Ubuntu20.04 安装配置vsftpd</a>
+    </h1>
+  
+
+        
+        <a href="/2021/02/05/Ubuntu20-04-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEvsftpd/" class="archive-article-date">
+  	<time datetime="2021-02-05T03:24:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-vsftpd简介"><a href="#1-vsftpd简介" class="headerlink" title="1. vsftpd简介"></a>1. vsftpd简介</h3><p>&#8194;vsftpd 是“very secure FTP daemon”的缩写，安全性是它的一个最大的特点。vsftpd 是一个 UNIX 类操作系统上运行的服务器的名字，它可以运行在诸如 Linux、BSD、Solaris、 HP-UNIX等系统上面，是一个完全免费的、开放源代码的ftp服务器软件，支持很多其他的 FTP 服务器所不支持的特征。比如：非常高的安全性需求、带宽限制、良好的可伸缩性、可创建虚拟用户、支持IPv6、速率高等。</p>
+<h3 id="2-安装vsftpd和db4-7"><a href="#2-安装vsftpd和db4-7" class="headerlink" title="2. 安装vsftpd和db4.7"></a>2. 安装vsftpd和db4.7</h3><p>&#8194;1）安装vsftpd：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get install vsftpd</span><br></pre></td></tr></table></figure>
+<p>&#8194;2）安装db4.7：<br>&#8194;安装db4.7，找到安装目录，例如/ftp/db4.7-util_4.7.25-21_amd64.deb，然后在此目录下运行如下命令进行安装，也可以使用命令”sudo apt-get install db4.7-util”进行在线安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ dpkg -i db4.7-util_4.7.25-21_amd64.deb</span><br></pre></td></tr></table></figure>
+<h3 id="3-建立本地虚拟用户"><a href="#3-建立本地虚拟用户" class="headerlink" title="3. 建立本地虚拟用户"></a>3. 建立本地虚拟用户</h3><p>&#8194;创建虚拟用户virtual，用户根目录为/home/ftp，并且此用户根目录拥有者为virtual。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ useradd -d /home/ftp virtual</span><br><span class="line">$ chown virtual:virtual /home/ftp</span><br></pre></td></tr></table></figure>
+<h3 id="4-建立虚拟用户数据库"><a href="#4-建立虚拟用户数据库" class="headerlink" title="4. 建立虚拟用户数据库"></a>4. 建立虚拟用户数据库</h3><p>&#8194;创建/etc/vsftpd目录，并在此目录创建login.txt文件，输入虚拟用户的账号和密码，奇数行为用户名，偶数行为密码。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir /etc/vsftpd</span><br><span class="line">$ vim /etc/vsftpd/login.txt</span><br></pre></td></tr></table></figure>
+<p>&#8194;然后生成ftp数据库，并赋予600权限。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ db4.7_load -T -t <span class="built_in">hash</span> -f /etc/vsftpd/login.txt /etc/vsftpd/vsftpd_login.db</span><br><span class="line">$ chmod 600 /etc/vsftpd/vsftpd_login.db</span><br></pre></td></tr></table></figure>
+<h3 id="5-建立基于vsftpd-login的PAM授权文件"><a href="#5-建立基于vsftpd-login的PAM授权文件" class="headerlink" title="5. 建立基于vsftpd_login的PAM授权文件"></a>5. 建立基于vsftpd_login的PAM授权文件</h3><p>&#8194;创建vsftpd.vu文件，并按照如下内容写入文件，此授权文件名称和vsftpd.conf文件中的pam_service_name名称保持一致。 vsftpd.vu的内容为： </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">auth required pam_userdb.so db=/etc/vsftpd/vsftpd_login</span><br><span class="line">account required pam_userdb.so db=/etc/vsftpd/vsftpd_login</span><br></pre></td></tr></table></figure>
+<h3 id="6-设置用户权限等问题"><a href="#6-设置用户权限等问题" class="headerlink" title="6. 设置用户权限等问题"></a>6. 设置用户权限等问题</h3><p>&#8194;创建virtual目录  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir /etc/vfstpd/virtual</span><br></pre></td></tr></table></figure>
+<p>&#8194;并在该文件夹下依次建立与logins.txt对应的帐号名称相同的文件内容可以参考下面。 </p>
+<p>&#8194;只允许下载 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">anon_world_readable_only=NO</span><br><span class="line">local_root=/home/ftp</span><br></pre></td></tr></table></figure>
+<p>&#8194;允许建立，修改，但是不允许删除</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">anon_world_readable_only=NO</span><br><span class="line">write_enable=YES</span><br><span class="line">anon_mkdir_write_enable=YES</span><br><span class="line">anon_upload_enable=YES</span><br><span class="line">local_root=/home/ftp</span><br></pre></td></tr></table></figure>
+<p>&#8194;全部权限 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">anon_world_readable_only=NO</span><br><span class="line">write_enable=YES</span><br><span class="line">anon_mkdir_write_enable=YES</span><br><span class="line">anon_upload_enable=YES</span><br><span class="line">anon_other_write_enable=YES</span><br><span class="line">local_root=/home/ftp</span><br></pre></td></tr></table></figure>
+<h3 id="7-设置vsftpd-cong文件"><a href="#7-设置vsftpd-cong文件" class="headerlink" title="7. 设置vsftpd.cong文件"></a>7. 设置vsftpd.cong文件</h3><p><img src="/assets/img/favicon.ico" alt="vsftpd.cong"></p>
+<h3 id="8-启动vsftpd"><a href="#8-启动vsftpd" class="headerlink" title="8. 启动vsftpd"></a>8. 启动vsftpd</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ service vsftpd restart</span><br></pre></td></tr></table></figure>
+<h3 id="9-无法登录的问题"><a href="#9-无法登录的问题" class="headerlink" title="9. 无法登录的问题"></a>9. 无法登录的问题</h3><ul>
+<li>检查ftp根目录是否存在</li>
+<li>检查配置过程中各个路径是否正确</li>
+<li>查看ftp根目录拥有者是否为virtual,并且根目录不具有可写属性，如下所示<br><img src="/assets/img/favicon.ico" alt="vsftpd.cong"><br>&#8194;如果不是，则运行如下命令：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ chown -R virtual /home/ftp</span><br></pre></td></tr></table></figure>
+&#8194;取消可写属性<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ chmod a-w /home/ftp</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/02/05/Ubuntu20-04-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEvsftpd/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-我的第一篇博客" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
