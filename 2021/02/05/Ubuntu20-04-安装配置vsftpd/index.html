@@ -434,30 +434,31 @@
 
 
 
-
+  <div id="giteement-ctn"></div>
   
-  <div id="gitment-ctn"></div>
-  
-    <!-- 中文 -->
-    <link rel="stylesheet" href="/lib/gitment.css">
-    <script src="/lib/gitment.js"></script>
+    <link rel="stylesheet" href="/lib/default.css">
+    <script src="/lib/giteement.browser.js"></script>
   
   <script>
-    <!-- id: "Ubuntu20.04 安装配置vsftpd" -->
-    var gitment = new Gitment({
-      id: "20210205112422",
-      owner: 'fengzwg',
-      repo: 'fengzwg.github.io',
-      oauth: {
-        client_id: '9eb2bf12535366ab6474',
-        client_secret: 'd2ef44ee2191a0df82d26d9ac1bbe13856dc3bf5',
-      },
-    })
-    gitment.render('gitment-ctn')
+  <!-- id: "Ubuntu20.04 安装配置vsftpd" -->
+  var giteement = new Giteement({
+    id: '20210205112422',
+    owner: 'iFengZhiwei',
+    repo: 'iFengZhiwei.gitee.io',
+    backcall_uri: 'https://fengzwg.github.io/',
+    oauth_uri: 'https://cors-anywhere.herokuapp.com/https://gitee.com/oauth/token',
+    oauth: {
+      client_id: 'd9722440a83cd00e5b668b83b84a2c816265b71e7034fb428f9e1da400c933e5',
+      client_secret: '3b38c3b86060cccce8290ae729926b43f222aeebcde87cd18e71559ad429edb3'
+    },
+  })
+  giteement.render('giteement-ctn')
   </script>
 
 
-  
+
+
+
 
 
 
