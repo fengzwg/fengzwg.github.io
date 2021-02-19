@@ -17,13 +17,12 @@
 <meta property="og:site_name" content="风筝舞的博客">
 <meta property="og:description" content="1. vsftpd简介&amp;#8194;vsftpd 是“very secure FTP daemon”的缩写，安全性是它的一个最大的特点。vsftpd 是一个 UNIX 类操作系统上运行的服务器的名字，它可以运行在诸如 Linux、BSD、Solaris、 HP-UNIX等系统上面，是一个完全免费的、开放源代码的ftp服务器软件，支持很多其他的 FTP 服务器所不支持的特征。比如：非常高的安全性需求">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://fengzwg.github.io/img/favicon.ico">
-<meta property="og:image" content="https://fengzwg.github.io/img/favicon.ico">
+<meta property="og:image" content="https://fengzwg.github.io/img/virtual.png">
 <meta property="article:published_time" content="2021-02-05T03:24:22.000Z">
-<meta property="article:modified_time" content="2021-02-05T11:56:44.216Z">
+<meta property="article:modified_time" content="2021-02-19T11:50:40.088Z">
 <meta property="article:author" content="风筝舞">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://fengzwg.github.io/img/favicon.ico">
+<meta name="twitter:image" content="https://fengzwg.github.io/img/virtual.png">
   
     <link rel="alternative" href="/atom.xml" title="风筝舞的博客" type="application/atom+xml">
   
@@ -229,7 +228,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">667字</span>
+      <span class="post-count">694字</span>
     </span>
   </span>
 
@@ -274,12 +273,12 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">anon_world_readable_only=NO</span><br><span class="line">write_enable=YES</span><br><span class="line">anon_mkdir_write_enable=YES</span><br><span class="line">anon_upload_enable=YES</span><br><span class="line">local_root=/home/ftp</span><br></pre></td></tr></table></figure>
 <p>&#8194;全部权限 </p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">anon_world_readable_only=NO</span><br><span class="line">write_enable=YES</span><br><span class="line">anon_mkdir_write_enable=YES</span><br><span class="line">anon_upload_enable=YES</span><br><span class="line">anon_other_write_enable=YES</span><br><span class="line">local_root=/home/ftp</span><br></pre></td></tr></table></figure>
-<h3 id="7-设置vsftpd-cong文件"><a href="#7-设置vsftpd-cong文件" class="headerlink" title="7. 设置vsftpd.cong文件"></a>7. 设置vsftpd.cong文件</h3><p><img src="/img/favicon.ico" alt="vsftpd.cong"></p>
+<h3 id="7-设置vsftpd-cong文件"><a href="#7-设置vsftpd-cong文件" class="headerlink" title="7. 设置vsftpd.cong文件"></a>7. 设置vsftpd.cong文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">listen=YES</span><br><span class="line">connect_from_port_20=YES</span><br><span class="line">ftpd_banner=Welcome to virtual FTP service.</span><br><span class="line">anonymous_enable=NO</span><br><span class="line">local_enable=YES</span><br><span class="line">write_enable=NO</span><br><span class="line">anon_upload_enable=NO</span><br><span class="line">anon_mkdir_write_enable=NO</span><br><span class="line">anon_other_write_enable=NO</span><br><span class="line">chroot_local_user=YES</span><br><span class="line">guest_enable=YES</span><br><span class="line">guest_username=virtual</span><br><span class="line">pam_service_name=vsftpd.vu</span><br><span class="line">user_config_dir=/etc/vsftpd/virtual</span><br><span class="line">xferlog_enable=YES</span><br><span class="line">xferlog_file=/var/<span class="built_in">log</span>/vsftpd.log</span><br></pre></td></tr></table></figure>
 <h3 id="8-启动vsftpd"><a href="#8-启动vsftpd" class="headerlink" title="8. 启动vsftpd"></a>8. 启动vsftpd</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ service vsftpd restart</span><br></pre></td></tr></table></figure>
 <h3 id="9-无法登录的问题"><a href="#9-无法登录的问题" class="headerlink" title="9. 无法登录的问题"></a>9. 无法登录的问题</h3><ul>
 <li>检查ftp根目录是否存在</li>
 <li>检查配置过程中各个路径是否正确</li>
-<li>查看ftp根目录拥有者是否为virtual,并且根目录不具有可写属性，如下所示<br><img src="/img/favicon.ico" alt="vsftpd.cong"><br>&#8194;如果不是，则运行如下命令：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ chown -R virtual /home/ftp</span><br></pre></td></tr></table></figure>
+<li>查看ftp根目录拥有者是否为virtual,并且根目录不具有可写属性，如下所示<br><img src="/img/virtual.png" alt="vsftpd.cong"><br>&#8194;如果不是，则运行如下命令：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ chown -R virtual /home/ftp</span><br></pre></td></tr></table></figure>
 &#8194;取消可写属性<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ chmod a-w /home/ftp</span><br></pre></td></tr></table></figure></li>
 </ul>
 
@@ -523,10 +522,10 @@
   var titleTime;
   document.addEventListener("visibilitychange", function () {
     if (document.hidden) {
-      document.title = "(つェ⊂) 我藏好了哦~ " + originTitle;
+      document.title = "风筝舞的博客" + originTitle;
       clearTimeout(titleTime);
     } else {
-      document.title = "(*´∇｀*) 被你发现啦~ " + originTitle;
+      document.title = "风筝舞的博客 " + originTitle;
       titleTime = setTimeout(function () {
         document.title = originTitle;
       }, 2000);
